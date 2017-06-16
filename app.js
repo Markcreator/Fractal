@@ -2,9 +2,11 @@ var c;
 var ctx;
 	
 $(function() {
+	// Load canvas
 	c = $("canvas")[0];
 	ctx = c.getContext("2d");
 	
+	// Define canvas dimensions TODO dynamic resolution
 	c.width = window.innerWidth;
 	c.height = window.innerHeight;
 	
@@ -14,11 +16,12 @@ $(function() {
 });
 
 function loadEventListeners() {
-	//Dragging
+	// Dragging
 	var dragging = false;
-    var last = [0, 0];
-    var translated = [0, 0];
+	var last = [0, 0];
+	var translated = [0, 0];
 
+	// On mouse click
 	c.onmousedown = function(e) {		
 		var evt = e || event;
 		dragging = true;
@@ -26,6 +29,7 @@ function loadEventListeners() {
 		last[1] = evt.offsetY;
 	}
 
+	// On mouse move
 	window.onmousemove = function(e) {
 		var evt = e || event;
 		if(dragging) {
@@ -37,6 +41,7 @@ function loadEventListeners() {
 		}
 	}
 
+	// On mouse release
 	window.onmouseup = function(e) {
 		dragging = false;
 		
@@ -53,9 +58,9 @@ function loadEventListeners() {
 		}
 	}
 	
-	//Zooming
+	//Zooming using cross-browser compatible scroll event listening
 	var mousewheelevt = (/Firefox/i.test(navigator.userAgent)) ? "DOMMouseScroll" : "mousewheel"; // FF doesn't recognize mousewheel as of FF3.x
-
+	
 	if (document.attachEvent) { // if IE (and Opera depending on user setting)
 		document.attachEvent("on"+mousewheelevt, function(e) { onScrollEvent(e); });
 	} else if (document.addEventListener) { // WC3 browsers
@@ -73,17 +78,17 @@ function loadEventListeners() {
 		var pos = getMousePos(c, e);
 		zoomAtPixels(c, pos[0], pos[1], up ? 0.5 : -0.5);
 		
-		render(); //Rerender
+		render();
 	}
 }
 
 //Canvas rendering
-var maxDepth = 100;
+var maxDepth = 100; // Fractal recursion depth
 
 function render() {
 	$("#plotSizeDisplay").text("["+plotX[0]+","+plotX[1]+"] x ["+plotY[0]+","+plotY[1]+"]")
 	
-	//calculate exposure
+	//Calculate exposure
 	var averageWidth = (xWidth+yWidth)/2;
 	
 	maxDepth = 100 + (1/averageWidth); // TODO calculate expected average
@@ -131,11 +136,10 @@ function render() {
 var plotRes = [window.innerWidth, window.innerHeight]; // X and Y Resolution of plot screen
 var plotX = [-2, 1]; // Lowest and highest X value of plot
 var plotY = [-2, 2]; // Lowest and highest Y value of plot
-var renderAxis = false;
 var yWidth; // Distance between lowest and highest Y value
 var xWidth; // Distance between lowest and highest X value
 updateWidths();
-var staticRatio = xWidth/yWidth;
+var staticRatio = xWidth/yWidth; // Static screen ratio to keep things scaled properly
 
 function getFloatsFromPixels(x, y) {
 	return [(x/plotRes[0])*xWidth + plotX[0], plotY[1] - (y/plotRes[1])*yWidth]; // X = highestPlotValue - (pixel/screenWidth)*plotWidth; Y = (pixel/screenWidth)*plotWidth - lowestPlotValue; to convert from pixel on screen to plot values
