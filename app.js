@@ -30,7 +30,7 @@ function loadEventListeners() {
 	}
 
 	// On mouse move
-	window.onmousemove = function(e) {
+	c.onmousemove = function(e) {
 		var evt = e || event;
 		if(dragging) {
 			var delta = [evt.offsetX - last[0], evt.offsetY - last[1]];
@@ -42,7 +42,7 @@ function loadEventListeners() {
 	}
 
 	// On mouse release
-	window.onmouseup = function(e) {
+	c.onmouseup = function(e) {
 		dragging = false;
 		
 		if(translated[0] != 0 || translated[1] != 0) {
@@ -92,7 +92,9 @@ function render() {
 	var averageWidth = (xWidth+yWidth)/2;
 	
 	maxDepth = 100 + (1/averageWidth); // TODO calculate expected average
-	console.log("depth: " + maxDepth);
+	if(maxDepth > 200) {
+		maxDepth = 200;
+	}
 	
 	var imgData = ctx.createImageData(c.width, c.height);
 	var data = imgData.data;

@@ -10,12 +10,13 @@
 		<style>
 			html, body {
 				overflow: hidden;
-				margin: 0px;
-				padding: 0px;
+				margin: 0;
+				padding: 0;
 			}
 			#plotSizeDisplay {
 				position: fixed;
 				margin: 0;
+				padding: 0;
 				color: white;
 				left: 1%;
 				top: 1%;
@@ -28,4 +29,23 @@
 	</body>
 </html>
 
-<!-- https://stackoverflow.com/questions/4899799/whats-the-best-way-to-set-a-single-pixel-in-an-html5-canvas -->
+<script>
+	//Signature
+	document.body.innerHTML += '<img id="sign" src="https://avatars3.githubusercontent.com/u/1979278?v=3&s=128" alt="Markcreator"/>';
+	var sign = document.getElementById("sign");
+	sign.style.cssText += "position:fixed; margin:0; padding:0; left:0; bottom:0; width:5%; min-width: 75px; border-style: solid;";
+	
+	sign.onmouseover = function() {
+		sign.style.borderColor = "#808080";
+		sign.style.filter = "brightness(150%)";
+	}
+	sign.onmouseleave = function() {
+		sign.style.borderColor = "#000";
+		sign.style.filter = "brightness(100%)";
+	}
+	sign.onclick = function() {
+		var win = window.open("https://github.com/Markcreator", "_blank");
+		win.focus();
+	}
+	
+</script>
